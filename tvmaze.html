@@ -1,6 +1,7 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
     <title>TV Maze</title>
     <link rel="stylesheet"
       href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
@@ -8,41 +9,39 @@
   <body>
     <div class="container">
 
-    <h1>TV Maze</h1>
+      <h1>TV Maze</h1>
 
-    <form class="form-inline" id="search-form">
-      <input class="form-control" id="search-query" value="" placeholder="Search for a Show!">
-      <button class="btn btn-primary" type="submit">Go!</button>
-    </form>
+      <form class="form-inline" id="search-form">
+        <input class="form-control" id="search-query" value="" placeholder="Search for a Show!">
+        <button class="btn btn-primary" type="submit">Go!</button>
+      </form>
+      <!-- Section for shows list DOM population -->
+      <div class="row mt-3" id="shows-list">
+      </div>
 
+      <!-- <section style="display: none" id="episodes-area">
+        <h2>Episodes</h2> 
+        <ul id="episodes-list">
+        </ul>
+      </section>   -->
 
-
-    <!-- Section for shows list DOM population -->
-    <div class="row mt-3" id="shows-list">
-    </div>
-
-    <!-- <section style="display: none" id="episodes-area">
-      <h2>Episodes</h2> 
-      <ul id="episodes-list">
-      </ul>
-    </section>   -->
-
-    <!-- Episodes modal section -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="episodeModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="episodeModalLabel">Episodes</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <ul id="episodes-list">
-            </ul>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <!-- Episodes modal section -->
+      <div class="modal fade" id="episodeModal" tabindex="-1" role="dialog" aria-labelledby="episodeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="episodeModalLabel">Episodes</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <ul id="episodes-list">
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
           </div>
         </div>
       </div>
@@ -51,11 +50,8 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-    <script src="http://unpkg.com/jquery"></script>
+    <!-- <script src="http://unpkg.com/jquery"></script> -->
     <script src="http://unpkg.com/axios/dist/axios.js"></script>
     <script src="tvmaze.js"></script>
-
-    </div>
-
   </body>
 </html>

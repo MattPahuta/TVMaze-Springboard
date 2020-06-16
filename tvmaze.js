@@ -60,7 +60,7 @@ function populateShows(shows) {
            <div class="card-body">
              <h5 class="card-title">${show.name}</h5>
              <p class="card-text">${show.summary}</p>
-             <button type="button" class="btn btn-primary mt-2 get-episodes" data-toggle="modal" data-target="#exampleModal">Get Episodes</button>
+             <button type="button" class="btn btn-primary mt-2 get-episodes" data-toggle="modal" data-target="#episodeModal">Get Episodes</button>
            </div>
          </div>
        </div>
@@ -115,8 +115,7 @@ async function getEpisodes(id) {
 function populateEpisodes (episodes) { // pass in the array of episodes provided by the click handler
   const $episodesList = $('#episodes-list');
   $episodesList.empty(); // clear the episodes from the ul to avoid stacking results
-  // const modalTitle = $('.modal-title');
-  // modalTitle = 'This thing work?';
+
   // loop over episodes and populate LI's 
   for (let episode of episodes) {
     let $listItem = $( // each episode gets assigned to $listItem let variable
