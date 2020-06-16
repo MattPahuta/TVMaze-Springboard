@@ -19,10 +19,9 @@
  */
 
 async function searchShows(query) {
-  // TODO: Make an ajax request to the searchShows api.  Remove
-  // hard coded data.
+  // TODO: Make an ajax request to the searchShows api. 
   // Remove the hard coded array from the searchShows function and replace the code with an AJAX request to the search shows api from TVMaze. Make sure that the array of information you return from the function is formatted as described in the comments for the searchShows function.
-  let res = await axios.get(`http://api.tvmaze.com/search/shows?q=${query}`);
+  const res = await axios.get(`http://api.tvmaze.com/search/shows?q=${query}`); // use the await keyword within async function
   console.log(res)
   let shows = res.data.map(result => {
     let show = result.show;
@@ -46,8 +45,6 @@ async function searchShows(query) {
   // ]
 }
 
-
-
 /** Populate shows list:
  *     - given list of shows, add shows to DOM
  */
@@ -63,7 +60,7 @@ function populateShows(shows) {
            <div class="card-body">
              <h5 class="card-title">${show.name}</h5>
              <p class="card-text">${show.summary}</p>
-             <button class="btn btn-primary get-episodes">Episodes</button>
+             <button type="button" class="btn btn-primary mt-2 get-episodes" data-toggle="modal" data-target="#exampleModal">Get Episodes</button>
            </div>
          </div>
        </div>
@@ -72,7 +69,10 @@ function populateShows(shows) {
     $showsList.append($item); // append $item variable to DOM ID#showsList
   }
 }
-
+/*
+Old non-modal button:
+<button class="btn btn-primary get-episodes">Episodes</button>
+*/
 
 /** Handle search form submission:
  *    - hide episodes area
@@ -85,7 +85,7 @@ $("#search-form").on("submit", async function handleSearch (evt) {
   let query = $("#search-query").val();
   if (!query) return;
 
-  $("#episodes-area").hide();
+  // $("#episodes-area").hide(); // not needed for modal version of episodes section
 
   let shows = await searchShows(query);
 
@@ -101,7 +101,7 @@ async function getEpisodes(id) {
   // TODO: get episodes from tvmaze
   //       you can get this by making GET request to
   //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes
-  let res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`);
+  const res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`); // use aswait keyword in async function
   let episodes = res.data.map(episode => ({
     id: episode.id,
     name: episode.name,
@@ -112,25 +112,27 @@ async function getEpisodes(id) {
   return episodes;
 }
 
-function populateEpisodes (arrOfEpisodes) {
+function populateEpisodes (episodes) { // pass in the array of episodes provided by the click handler
   const $episodesList = $('#episodes-list');
-  $episodesList.empty();
-
-  for (let episode of arrOfEpisodes) {
-    let $item = $(
+  $episodesList.empty(); // clear the episodes from the ul to avoid stacking results
+  // const modalTitle = $('.modal-title');
+  // modalTitle = 'This thing work?';
+  // loop over episodes and populate LI's 
+  for (let episode of episodes) {
+    let $listItem = $( // each episode gets assigned to $listItem let variable
       `<li>${episode.name}
       (season ${episode.season}, episode ${episode.number}) </li>`
     );
 
-    $episodesList.append($item);
+    $episodesList.append($listItem);
   }
-
-  $('#episodes-area').show(); // use jquery .show() to reveal the #episodes-area <section>
+  // Non-modal episodes area:
+  // $('#episodes-area').show(); // use jquery .show() to reveal the #episodes-area <section>
 }
 
 // Use click handler to retrieve the right episode id, using jQuery
 $("#shows-list").on("click", ".get-episodes", async function handleEpisodeClick(e) {
-  let showId = $(e.target).closest(".show").data("show-id");
-  let episodes = await getEpisodes(showId);
-  populateEpisodes(episodes);
+  let showId = $(e.target).closest(".show").data("show-id"); // target the closest element to e.target that has .show class and include .data attribute
+  let episodes = await getEpisodes(showId); // await the getEpisodes function with showID passed in as argument
+  populateEpisodes(episodes); // invoke the populateEpisodes function and pass in the array of episodes
 });
