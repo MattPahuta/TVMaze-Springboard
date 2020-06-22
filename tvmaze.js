@@ -2,7 +2,6 @@
  *     { id, name, summary, episodesUrl }
  */
 
-
 /** Search Shows
  *    - given a search term, search for tv shows that
  *      match that query.  The function is async show it
@@ -54,18 +53,18 @@ function populateShows(shows) {
 
   for (let show of shows) {
     let $item = $(
-      `<div class="col-md-6 col-lg-3 show" data-show-id="${show.id}"> 
+      `<div data-show-name="${show.name}" class="col-md-6 col-lg-3 show" data-show-id=${show.id} > 
          <div class="card" data-show-id="${show.id}">
           <img class="card-img-top" src="${show.image}"/>
            <div class="card-body">
              <h5 class="card-title">${show.name}</h5>
              <p class="card-text">${show.summary}</p>
-             <button type="button" class="btn btn-primary mt-2 get-episodes" data-toggle="modal" data-target="#episodeModal">Get Episodes</button>
+             <button type="button" class="btn btn-primary mt-2 get-episodes" data-toggle="modal" data-target="#episodeModal">${show.name} Episodes</button>
            </div>
          </div>
        </div>
-      `); // data-show-id 
-
+      `); 
+      // ADD showName var in button 
     $showsList.append($item); // append $item variable to DOM ID#showsList
   }
 }
@@ -85,13 +84,12 @@ $("#search-form").on("submit", async function handleSearch (evt) {
   let query = $("#search-query").val();
   if (!query) return;
 
-  // $("#episodes-area").hide(); // not needed for modal version of episodes section
+  // $("#episodes-area").hide(); // not needed for bootstrap modal version of episodes return
 
   let shows = await searchShows(query);
 
   populateShows(shows);
 });
-
 
 /** Given a show ID, return list of episodes:
  *      { id, name, season, number }
@@ -102,20 +100,27 @@ async function getEpisodes(id) {
   //       you can get this by making GET request to
   //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes
   const res = await axios.get(`http://api.tvmaze.com/shows/${id}/episodes`); // use aswait keyword in async function
+
   let episodes = res.data.map(episode => ({
     id: episode.id,
     name: episode.name,
     season: episode.season,
-    number: episode.number
+    number: episode.number,
   }));
   // TODO: return array-of-episode-info, as described in docstring above
   return episodes;
 }
 
-function populateEpisodes (episodes) { // pass in the array of episodes provided by the click handler
+function populateEpisodes (episodes, showName) { // pass in the array of episodes provided by the click handler
   const $episodesList = $('#episodes-list');
+  const $modalTitle = $('#episodeModalLabel'); // Add to customize modal title (plug in show name instead of hard-coded episodes)
   $episodesList.empty(); // clear the episodes from the ul to avoid stacking results
-
+  
+  $modalTitle.text(showName) // Added to apply show name within episode list modal
+  console.log('Episodes in populateEpisodes is: ', episodes)
+  if (episodes.length === 0){ // Add check for empty episodes array
+    $episodesList.append('No Episodes Found');
+  }
   // loop over episodes and populate LI's 
   for (let episode of episodes) {
     let $listItem = $( // each episode gets assigned to $listItem let variable
@@ -125,13 +130,23 @@ function populateEpisodes (episodes) { // pass in the array of episodes provided
 
     $episodesList.append($listItem);
   }
-  // Non-modal episodes area:
+  // For use with non-bootstrap-modal episodes area:
   // $('#episodes-area').show(); // use jquery .show() to reveal the #episodes-area <section>
 }
 
 // Use click handler to retrieve the right episode id, using jQuery
 $("#shows-list").on("click", ".get-episodes", async function handleEpisodeClick(e) {
   let showId = $(e.target).closest(".show").data("show-id"); // target the closest element to e.target that has .show class and include .data attribute
-  let episodes = await getEpisodes(showId); // await the getEpisodes function with showID passed in as argument
-  populateEpisodes(episodes); // invoke the populateEpisodes function and pass in the array of episodes
+  let showName = $(e.target).closest(".show").data("show-name");
+  console.log('show-name: ', showName);
+
+  let episodes = await getEpisodes(showId); // await the getEpisodes function with showID passed in as argument 
+  populateEpisodes(episodes, showName); // invoke the populateEpisodes function and pass in the array of episodes, add showName argument to pass in for modal title
 });
+
+
+// apply episide title to:
+// <h5 class="modal-title" id="episodeModalLabel">Episodes</h5>
+
+// populateShows function
+// if statement to account for empty episodes 
